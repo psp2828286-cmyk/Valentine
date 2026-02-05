@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    font-family: "Segoe UI", sans-serif;
+    overflow: hidden;
+  }
+
+  /* ---------- Screens ---------- */
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .screen.active {
+    display: flex;
+  }
+
+  /* ---------- Backgrounds ---------- */
+  #questionScreen {
+    background: url("bg-first.jpeg") no-repeat center center;
+    background-size: cover;
+  }
+
+  #yayScreen {
+    background: url("bg-second.jpg") no-repeat center center;
+    background-size: cover;
+  }
+
+  /* ---------- Card ---------- */
+  .card {
+    background: rgba(255,255,255,0.92);
+    padding: 40px 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    min-width: 340px;
+    z-index: 10;
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 25px;
+  }
+
+  /* ---------- Buttons ---------- */
+  .buttons {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    height: 45px;
+  }
+
+  button {
+    padding: 10px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+
+  #yesBtn {
+    background: #e63946;
+    color: white;
+    z-index: 5;
+  }
+
+  #noBtn {
+    background: #e63946;
+    color: white;
+    position: fixed;   /* KEY CHANGE: free to move anywhere */
+    z-index: 9999;
+  }
+
+  /* ---------- Celebration Content ---------- */
+  .yay {
+    font-size: 34px;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    margin: 10px 0 25px;
+    font-size: 18px;
+  }
+
+  .media-box {
+    width: 260px;
+    height: 160px;
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+
+  .media-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- Heart Rain ---------- */
+  .heart {
+    position: fixed;
+    top: -20px;
+    font-size: 20px;
+    animation: fall linear forwards;
+    color: #ff4d6d;
+    z-index: 9999;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- 🎶 Music -->
+<audio id="music" src="music.mp3" loop preload="auto"></audio>
+
+<!-- 💌 First Screen -->
+<div id="questionScreen" class="screen active">
+  <div class="card">
+    <h1>Anshul,<br>Will you be my Valentine? 💕</h1>
+    <div class="buttons">
+      <button id="yesBtn">YES</button>
+      <button id="noBtn">NO</button>
+    </div>
+  </div>
+</div>
+
+<!-- 💖 Second Screen -->
+<div id="yayScreen" class="screen">
+  <div class="card">
+    <div class="yay">💖 YAY!!! 💖</div>
+    <div class="subtitle">Good Decision... As if you had an option 😌</div>
+
+    <div class="media-box">
+      <img src="love.gif" alt="Love GIF">
+    </div>
+
+    <div>I Love You Too, Baby❤️</div>
+  </div>
+</div>
+
+<script>
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const questionScreen = document.getElementById("questionScreen");
+  const yayScreen = document.getElementById("yayScreen");
+  const music = document.getElementById("music");
+
+  /* 🔊 Start music on first interaction */
+  function startMusicOnce() {
+    music.play().catch(() => {});
+    document.removeEventListener("click", startMusicOnce);
+    document.removeEventListener("touchstart", startMusicOnce);
+  }
+  document.addEventListener("click", startMusicOnce);
+  document.addEventListener("touchstart", startMusicOnce);
+
+  /* 😈 NO button runs FAR AWAY */
+  noBtn.addEventListener("mouseover", () => {
+    const padding = 20;
+
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top  = Math.random() * maxY + "px";
+  });
+
+  /* 💘 YES click */
+  yesBtn.addEventListener("click", () => {
+    questionScreen.classList.remove("active");
+    yayScreen.classList.add("active");
+    startHearts();
+  });
+
+  /* 💕 Heart rain */
+  function startHearts() {
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration =
+        (2 + Math.random() * 3) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }, 300);
+  }
+</script>
+
+</body>
+</html>
